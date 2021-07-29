@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SlideShow</title>
+  <link rel="stylesheet" href="slideshow.css">
+
+  <style type="text/css">
+    body{
+      font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;
+    }
+  </style>
+
+  <style type="text/css">
+    #example1 input{
+      appearance: none;
+      position: relative;
+      width: 30px;
+      margin-bottom: 40px;
+    }
+
+    #example1 input::after,
+    #example1 input::before{
+      position: absolute;
+      display: block;
+      content: "";
+      height: 20px;
+      width: 20px;
+      border-radius: 50%;
+    }
+    #example1 input::before{
+      background: #eee8;
+    }
+    #example1 input:checked::after{
+      background: radial-gradient(yellow, transparent);
+    }
+
+
+
+    #example2 input{
+      display:none;
+    }
+    /* forward and backward button */
+    #example2 > button {
+      position: absolute;
+      font-size: 3em;
+      z-index: 20;
+      height: 100%;
+      width: 33%;
+      opacity: 0.2;
+    }
+    #example2 > button:hover {
+      opacity: 0.4;
+    }
+    /* click any child element with a data-number attribute will turn the page */
+    #example2 > button[data-number="-1"]{
+      left: 0;
+    }
+    #example2 > button[data-number="1"] {
+      right: 0;
+    }
+    /* animation */
+    #example2.forward input:checked ~ * {
+      animation: slide-moveleft 0.5s;
+    }
+    @keyframes slide-moveleft{
+      0%{ left:100%; }
+      100%{ left:0%; }
+    }
+    #example2.backward input:checked ~ * {
+      animation: slide-moveright 0.5s;
+    }
+    @keyframes slide-moveright{
+      0%{ left:-100%; }
+      100%{ right:0%; }
+    }
+
+    #example3 p {
+      font-size: 6em;
+      text-shadow: 0 0 20px #000,0 0 10px #000;
+      text-align: center;
+      color: white;
+      transform: translateY(-50px);
+      transition: transform 1s ease-out;
+    }
+    #example3 section{
+      background: linear-gradient(to bottom, #f082 0%, #f002 100%);
+    }
+    #example3 input:checked ~ section p{
+      transform: none;
+    }
+
+  </style>
+  <link rel="stylesheet"
+      href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.1.0/build/styles/default.min.css">
+
+</head>
+<body>
+<main style="max-width: 800px;margin:0 auto;"></main>
+
+<div id="example" class="slideshow">
+  <div>
+    <input type="radio" name="example">
+    <img src="https://source.unsplash.com/random?kittens">
+  </div>
+  <div>
+    <input type="radio" name="example">
+    <img src="https://source.unsplash.com/random?puppies">
+  </div>
+  <div>
+    <input type="radio" name="example">
+    <img src="https://source.unsplash.com/random?bunnies">
+  </div>
+</div>
+
+<div id="example1" class="slideshow">
+  <div>
+    <input type="radio" name="example1">
+    <img src="https://source.unsplash.com/random?kittens">
+  </div>
+  <div>
+    <input type="radio" name="example1">
+    <img src="https://source.unsplash.com/random?puppies">
+  </div>
+  <div>
+    <input type="radio" name="example1">
+    <img src="https://source.unsplash.com/random?bunnies">
+  </div>
+</div>
+
+<div id="example2" class="slideshow">
+  <button data-number="1">RIGHT</button>
+  <button data-number="-1">LEFT</button>
+  <div>
+    <input type="radio" name="example2">
+    <img src="https://source.unsplash.com/random?kittens">
+  </div>
+  <div>
+    <input type="radio" name="example2">
+    <img src="https://source.unsplash.com/random?puppies">
+  </div>
+  <div>
+    <input type="radio" name="example2">
+    <img src="https://source.unsplash.com/random?bunnies">
+  </div>
+</div>
+
+
+<div id="example3" class="slideshow">
+  <div>
+    <input type="radio" name="example3">
+    <img src="https://source.unsplash.com/random?kittens">
+    <section>
+      <p>CAT</p>
+    </section>
+  </div>
+  <div>
+    <input type="radio" name="example3">
+    <img src="https://source.unsplash.com/random?puppies">
+    <section>
+      <p>DOG</p>
+    </section>
+  </div>
+  <div>
+    <input type="radio" name="example3">
+    <img src="https://source.unsplash.com/random?bunnies">
+    <section>
+      <p>BUNNY</p>
+    </section>
+  </div>
+</div>
+
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.1.0/build/highlight.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+<script>
+  (() => {
+    // const template = document.querySelector("template").innerHTML
+    // const createSlideshow = (keywords,name,parent) => {
+    //   const slides = document.createElement("div")
+    //   slides.className = "slideshow " + name
+    //   slides.innerHTML = keywords.reduce((p,c) => {
+    //     return p+template.replace("$type",c)
+    //       .replace("$title",c.toUpperCase())
+    //       .replace("$name",name)
+    //   },"")
+    //   const $parent = document.querySelector(parent)
+    //   $parent.innerHTML = ""
+    //   $parent.appendChild(slides)
+    //   $parent.querySelector("input").checked=true
+
+    // }
+
+    fetch("./README.md")
+      .then(res => res.text())
+      .then(rawMarkdownText => {
+        marked(rawMarkdownText,(err,html) => {
+          document.querySelector('main').innerHTML = html
+          //createSlideshow(["hill","woods","savanna","dune","beach"],"nature","#example")
+          //createSlideshow(["golf","cycling","tennis","football","hockey"],"sports","#example")
+          //automation, optional but essential
+          import("./slideshow.js").then(({default:init}) => init(".slideshow",3000))
+
+          const examples = document.querySelectorAll(".example")
+          const slideshows = document.querySelectorAll(".slideshow")
+          examples.forEach((e,i) => {
+            e.innerHTML = "";
+            e.appendChild(slideshows[i])
+          })
+
+          hljs.highlightAll();
+        })
+    })
+  })();
+</script>
+</body>
+</html>

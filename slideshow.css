@@ -1,0 +1,63 @@
+/*tring to use minimum style*/
+.slideshow{
+  position:relative;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  min-height: 280px;
+}
+/*this only affects radio input tag, positioned to middle bottom*/
+.slideshow > div {
+  display: flex;
+  align-items: flex-end;
+}
+/* z-index: input(20) > active slide(10) > unactive slide(default) */
+.slideshow > div > input {
+  z-index: 20;
+  margin-bottom: 100%;
+}
+
+.slideshow > div > img{
+  object-fit: cover;
+}
+/* tag after input */
+.slideshow > div > input ~ * {
+  position:absolute;
+  left: 0;
+  height:100%;
+  width: 100%;
+  opacity: 0;
+  /* this transition is for when the slide no longer active,
+  it can stay until new activated slide can finishes it's entry animation */
+  transition: opacity 0.5s cubic-bezier(1, 0, 1, 0);
+}
+
+/* active slide / animation */
+.slideshow > div > input:checked ~ * {
+  z-index: 10;
+  opacity: 1;
+  transition: none;
+  animation: slideshow-fadein 0.5s;
+}
+@keyframes slideshow-fadein{
+  0%{ opacity:0 }
+  100% { opacity:1 }
+}
+
+
+/* optional, just show 'Loading' before img is loaded */
+.slideshow.loading:before {
+  content: 'Loading...';
+  font-size: 2em;
+  font-variant: small-caps;
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%,-50%);
+  z-index: 30;
+}
+
+.slideshow.loading * {
+  display: none !important;
+}
+
